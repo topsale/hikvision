@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: hikvision
+
+# 配置海康威视 sdk 位置
+hik:
+  path: classpath:sdk/win
