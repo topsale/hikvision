@@ -101,7 +101,7 @@ public class MP4Converter extends Thread implements Converter {
                 recorder.setAudioBitrate(grabber.getAudioBitrate());
                 recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
             }
-            recorder.setFormat("mp4");
+            recorder.setFormat("flv");
             recorder.setVideoBitrate(grabber.getVideoBitrate());
             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
             recorder.start();
