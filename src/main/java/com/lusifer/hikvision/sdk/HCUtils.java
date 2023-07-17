@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.lusifer.hikvision.beans.HikVisionLogin;
 import com.lusifer.hikvision.beans.HikVisionPreview;
 import com.lusifer.hikvision.callback.RealDataCallBack;
+import com.lusifer.hikvision.converter.FlvConverter;
 import com.lusifer.hikvision.converter.MP4Converter;
 import com.lusifer.hikvision.utils.SpringContextHolder;
 import com.sun.jna.Pointer;
@@ -266,7 +267,7 @@ public final class HCUtils {
      */
     public static void streamToFlv(PipedInputStream inputStream, PipedOutputStream outputStream, AsyncContext context, Integer playHandler){
         ThreadPoolTaskExecutor taskExecutor = SpringContextHolder.getBean("converterPoolExecutor");
-        MP4Converter converter = new MP4Converter(inputStream,outputStream,context,playHandler);
+        FlvConverter converter = new FlvConverter(inputStream,outputStream,context,playHandler);
         log.info("线程池主动执行任务的线程的大致数,{}",taskExecutor.getActiveCount());
         taskExecutor.submit(converter);
     }
