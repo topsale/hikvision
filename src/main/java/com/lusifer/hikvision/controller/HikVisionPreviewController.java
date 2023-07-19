@@ -48,7 +48,7 @@ public class HikVisionPreviewController {
     /**
      * 使用 RTSP 方式预览
      */
-    @GetMapping(value = "/preview/rtsp.mp4", produces = {"video/x-mp4;charset=UTF-8"})
+    @GetMapping(value = "/preview/rtsp.flv", produces = {"video/x-mp4;charset=UTF-8"})
     public void previewRTSP(HttpServletRequest request, HttpServletResponse response) {
         // 异步处理 HTTP 请求
         AsyncContext asyncContext = request.startAsync();
