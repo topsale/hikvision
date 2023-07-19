@@ -15,7 +15,6 @@ public class HikVisionPreview {
      */
     private int userId;
 
-
     /**
      * 通道编号
      */

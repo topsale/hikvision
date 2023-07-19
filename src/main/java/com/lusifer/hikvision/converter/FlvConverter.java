@@ -1,15 +1,13 @@
 package com.lusifer.hikvision.converter;
 
-
 import cn.hutool.core.util.StrUtil;
 import com.lusifer.hikvision.sdk.HCUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.Frame;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.AsyncContext;
 import java.io.ByteArrayOutputStream;
@@ -20,28 +18,17 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * flv转换器
- *
- * @author dlj
- * @date 2023/03/29
+ * FLV 转换器
  */
-/**
- * flv转换器
- *
- * @author dlj
- * @date 2023/03/29
- */
-public class FlvConverter extends Thread implements Converter{
+@Slf4j
+public class FlvConverter extends Thread implements Converter {
 
-    private static final Logger log = LoggerFactory.getLogger(FlvConverter.class);
     private byte[] headers;
     private String rtspUrl;
-    private PipedInputStream inputStream;
-    private AsyncContext context;
-
-
     private Integer playHandler;
 
+    private AsyncContext context;
+    private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
     public FlvConverter(String rtspUrl, AsyncContext context) {
@@ -49,11 +36,6 @@ public class FlvConverter extends Thread implements Converter{
         this.context = context;
     }
 
-    /**
-     * flv转换器 通过输入流转换
-     *
-     * @param inputStream 输入流
-     */
     public FlvConverter(PipedInputStream inputStream, PipedOutputStream outputStream, AsyncContext context, Integer playHandler) {
         this.inputStream = inputStream;
         this.context = context;
@@ -158,9 +140,7 @@ public class FlvConverter extends Thread implements Converter{
                 e.printStackTrace();
             }
         }
-
     }
-
 
     /**
      * 依次写出队列中的上下文
@@ -174,8 +154,6 @@ public class FlvConverter extends Thread implements Converter{
             context.complete();
         }
     }
-
-
 
     @Override
     public String getKey() {

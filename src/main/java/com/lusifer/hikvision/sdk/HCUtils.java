@@ -6,7 +6,6 @@ import com.lusifer.hikvision.beans.HikVisionLogin;
 import com.lusifer.hikvision.beans.HikVisionPreview;
 import com.lusifer.hikvision.callback.RealDataCallBack;
 import com.lusifer.hikvision.converter.FlvConverter;
-import com.lusifer.hikvision.converter.MP4Converter;
 import com.lusifer.hikvision.utils.SpringContextHolder;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -209,7 +208,7 @@ public final class HCUtils {
      */
     public static void rtspToMp4(String rtspUrl, AsyncContext context) {
         ThreadPoolTaskExecutor taskExecutor = SpringContextHolder.getBean("converterPoolExecutor");
-        MP4Converter converter = new MP4Converter(rtspUrl, context);
+        FlvConverter converter = new FlvConverter(rtspUrl, context);
         taskExecutor.submit(converter);
     }
 
@@ -262,13 +261,13 @@ public final class HCUtils {
      * 视频码流转flv
      *
      * @param outputStream 输出流
-     * @param context     上下文
-     * @param playHandler 播放句柄
+     * @param context      上下文
+     * @param playHandler  播放句柄
      */
-    public static void streamToFlv(PipedInputStream inputStream, PipedOutputStream outputStream, AsyncContext context, Integer playHandler){
+    public static void streamToFlv(PipedInputStream inputStream, PipedOutputStream outputStream, AsyncContext context, Integer playHandler) {
         ThreadPoolTaskExecutor taskExecutor = SpringContextHolder.getBean("converterPoolExecutor");
-        FlvConverter converter = new FlvConverter(inputStream,outputStream,context,playHandler);
-        log.info("线程池主动执行任务的线程的大致数,{}",taskExecutor.getActiveCount());
+        FlvConverter converter = new FlvConverter(inputStream, outputStream, context, playHandler);
+        log.info("线程池主动执行任务的线程的大致数,{}", taskExecutor.getActiveCount());
         taskExecutor.submit(converter);
     }
 

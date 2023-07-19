@@ -6,7 +6,7 @@ package com.lusifer.hikvision.converter;
 public interface Converter {
 
     /**
-     * 获取当前转换的 key
+     * 获取当前转换的 key 值
      */
     String getKey();
 
