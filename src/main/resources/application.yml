@@ -8,3 +8,9 @@ spring:
 # 配置海康威视 sdk 位置
 hik:
   path: classpath:sdk/win
+  # 直播流保活时间(分钟)
+  keepalive: ${CAMERASERVER_KEEPALIVE:5}
+  # Nginx 推送地址
+  pushIp: ${CAMERASERVER_PUSH_IP:127.0.0.1}
+  # Nginx 推送端口
+  pushPort: ${CAMERASERVER_PUSH_PORT:1935}

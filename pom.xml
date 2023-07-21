@@ -20,8 +20,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <hutool.version>5.7.11</hutool.version>
-        <javacv-platform.version>1.5.3</javacv-platform.version>
-        <jna.version>3.0.9</jna.version>
+        <javacv-platform.version>1.5.1</javacv-platform.version>
+        <jna.version>5.13.0</jna.version>
     </properties>
 
     <repositories>
@@ -63,10 +63,9 @@
 
         <!-- JNA -->
         <dependency>
-            <groupId>com.sun.jna</groupId>
+            <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
             <version>${jna.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.jna</groupId>

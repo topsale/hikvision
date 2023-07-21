@@ -13,7 +13,6 @@ import java.util.List;
 //SDK接口说明,HCNetSDK.dll
 public interface HCNetSDK extends Library {
 
-
     /*** 宏定义 ***/
     //常量
 
@@ -172,8 +171,8 @@ public interface HCNetSDK extends Library {
     public static final int MAX_VIDEO_DETECT_LIGHT_NUM = 12;  //视频检测的最大检测区域
     public static final int MAX_CALIB_RECOG_NUM = 2;  //标定区域个数
     public static final int MAX_RS485_NUM = 12; //485口最大支持数
-    public static final int MAX_MOBILE_POLYGON_NUM = 3; //移动布控支持最大牌识区域个数
-    public static final int MAX_MOBILE_DETECTLINE_NUM = 3; //移动布控支持最大违规检测线个数
+    public static final int MAX_MOBILE_POLYGON_NUM = 3; //移动布防支持最大牌识区域个数
+    public static final int MAX_MOBILE_DETECTLINE_NUM = 3; //移动布防支持最大违规检测线个数
     public static final int MAX_IOOUT_K_NUM = 8;  //K系列最大IO输出口个数
 
     public static final int NET_SDK_MAX_FDID_LEN = 256; //人脸库ID最大长度
@@ -625,16 +624,16 @@ public interface HCNetSDK extends Library {
 
     public static final int NET_DVR_GET_PRESET_NAME = 3383; //获取预置点名称
     public static final int NET_DVR_SET_PRESET_NAME = 3382; //设置预置点名称
-    public static final int NET_DVR_GET_RULECFG_V42 = 5049;  //获取行为分析参数(支持16条规则扩展)
-    public static final int NET_DVR_SET_RULECFG_V42 = 5050;  //设置行为分析参数(支持16条规则扩展)
+    public static final int NET_DVR_GET_RULECFG_V42 = 5049;  //获取异常行为检测参数(支持16条规则扩展)
+    public static final int NET_DVR_SET_RULECFG_V42 = 5050;  //设置异常行为检测参数(支持16条规则扩展)
 
     //车牌识别（NET_VCA_PLATE_CFG）;
     public static final int NET_DVR_SET_PLATECFG = 150;//设置车牌识别参数
 
     public static final int NET_DVR_GET_PLATECFG = 151;    //获取车牌识别参数
     //行为对应（NET_VCA_RULECFG）
-    public static final int NET_DVR_SET_RULECFG = 152;    //设置行为分析规则
-    public static final int NET_DVR_GET_RULECFG = 153;//获取行为分析规则
+    public static final int NET_DVR_SET_RULECFG = 152;    //设置异常行为检测规则
+    public static final int NET_DVR_GET_RULECFG = 153;//获取异常行为检测规则
     //双摄像机标定参数（NET_DVR_LF_CFG）
     public static final int NET_DVR_SET_LF_CFG = 160;//设置双摄像机的配置参数
     public static final int NET_DVR_GET_LF_CFG = 161;//获取双摄像机的配置参数
@@ -895,8 +894,7 @@ public interface HCNetSDK extends Library {
     public static final int COMM_TRADEINFO = 0x1500;  //ATMDVR主动上传交易信息
     public static final int COMM_ALARM_V30 = 0x4000;//9000报警信息主动上传
     public static final int COMM_ALARM_V40 = 0x4007;
-    public static final int COMM_ALARM_V50 = 0x3063;
-    public static final int COMM_ALARM_RULE = 0x1102;//行为分析信息上传
+    public static final int COMM_ALARM_RULE = 0x1102;//异常行为检测信息上传
     public static final int COMM_ALARM_PDC = 0x1103;//客流量统计报警上传
     public static final int COMM_UPLOAD_PLATE_RESULT = 0x2800;//交通抓拍结果上传
     public static final int COMM_ITS_PLATE_RESULT = 0x3050;//交通抓拍的终端图片上传
@@ -1112,21 +1110,19 @@ public interface HCNetSDK extends Library {
     public static final int PARA_VCA_RULE = 0x1000;    //行为规则
     //SDK_V222
 //智能设备类型
-    public static final int DS6001_HF_B = 60;//行为分析：DS6001-HF/B
+    public static final int DS6001_HF_B = 60;//异常行为检测：DS6001-HF/B
     public static final int DS6001_HF_P = 61;//车牌识别：DS6001-HF/P
-    public static final int DS6002_HF_B = 62;//双机跟踪：DS6002-HF/B
-    public static final int DS6101_HF_B = 63;//行为分析：DS6101-HF/B
+    public static final int DS6002_HF_B = 62;//双机：DS6002-HF/B
+    public static final int DS6101_HF_B = 63;//异常行为检测：DS6101-HF/B
     public static final int IVMS_2000 = 64;//智能分析仪
     public static final int DS9000_IVS = 65;//9000系列智能DVR
     public static final int DS8004_AHL_A = 66;//智能ATM, DS8004AHL-S/A
     public static final int DS6101_HF_P = 67;//车牌识别：DS6101-HF/P
     //能力获取命令
     public static final int VCA_DEV_ABILITY = 0x100;//设备智能分析的总能力
-    public static final int VCA_CHAN_ABILITY = 0x110;//行为分析能力
+    public static final int VCA_CHAN_ABILITY = 0x110;//异常行为检测能力
     public static final int DEVICE_ABILITY_INFO = 0x011; //设备通用能力类型，具体能力根据发送的能力节点来区分
     public static final int NET_DVR_CHECK_USER_STATUS = 20005; //检测设备是否在线
-
-    int NET_DVR_SDKChannelToISAPI(int lUserID, int lInChannel, boolean bSDKToISAPI);
     /**********************设备类型 end***********************/
 
     /*************************************************
@@ -1149,7 +1145,7 @@ public interface HCNetSDK extends Library {
 
         //用于列表中显示
         public String toStringTime() {
-            return String.format("%02d-%02d-%02d %02d:%02d:%02d", dwYear, dwMonth, dwDay, dwHour, dwMinute, dwSecond);
+            return String.format("%02d/%02d/%02d%02d:%02d:%02d", dwYear, dwMonth, dwDay, dwHour, dwMinute, dwSecond);
         }
 
         //存储文件名使用
@@ -1168,14 +1164,14 @@ public interface HCNetSDK extends Library {
     }
 
     public static class NET_DVR_HANDLEEXCEPTION_V30 extends Structure {
-        public int dwHandleType;    /*处理方式,处理方式的"或"结果*//*0x00: 无响应*//*0x01: 监视器上警告*//*0x02: 声音警告*//*0x04: 上传中心*/    /*0x08: 触发报警输出*//*0x20: 触发抓图*/  //(JPEG定制)
+        public int dwHandleType;    /*处理方式,处理方式的"或"结果*//*0x00: 无响应*//*0x01: 布防器上警告*//*0x02: 声音警告*//*0x04: 上传中心*/    /*0x08: 触发报警输出*//*0x20: 触发抓图*/  //(JPEG定制)
         public byte[] byRelAlarmOut = new byte[MAX_ALARMOUT_V30];  //报警触发的输出通道,报警触发的输出,为1表示触发该输出
 
     }
 
     //报警和异常处理结构(子结构)(多处使用)
     public static class NET_DVR_HANDLEEXCEPTION extends Structure {
-        public int dwHandleType;            /*处理方式,处理方式的"或"结果*//*0x00: 无响应*//*0x01: 监视器上警告*//*0x02: 声音警告*//*0x04: 上传中心*/    /*0x08: 触发报警输出*//*0x20: 触发抓图*/  //(JPEG定制)
+        public int dwHandleType;            /*处理方式,处理方式的"或"结果*//*0x00: 无响应*//*0x01: 布防器上警告*//*0x02: 声音警告*//*0x04: 上传中心*/    /*0x08: 触发报警输出*//*0x20: 触发抓图*/  //(JPEG定制)
         public byte[] byRelAlarmOut = new byte[MAX_ALARMOUT];  //报警触发的输出通道,报警触发的输出,为1表示触发该输出
 
     }
@@ -1463,7 +1459,7 @@ public interface HCNetSDK extends Library {
         /* 信号丢失触发报警输出 */
         public int dwHandleType;        //异常处理,异常处理方式的"或"结果
         /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
+        /*0x01: 布防器上警告*/
         /*0x02: 声音警告*/
         /*0x04: 上传中心*/
         /*0x08: 触发报警输出*/
@@ -1538,7 +1534,7 @@ public interface HCNetSDK extends Library {
         /* 异常处理方式 */
         public int dwHandleType;        //异常处理,异常处理方式的"或"结果
         /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
+        /*0x01: 布防器上警告*/
         /*0x02: 声音警告*/
         /*0x04: 上传中心*/
         /*0x08: 触发报警输出*/
@@ -1577,7 +1573,7 @@ public interface HCNetSDK extends Library {
         /* 信号丢失触发报警输出 */
         public int dwHandleType;        //异常处理,异常处理方式的"或"结果
         /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
+        /*0x01: 布防器上警告*/
         /*0x02: 声音警告*/
         /*0x04: 上传中心*/
         /*0x08: 触发报警输出*/
@@ -1942,6 +1938,7 @@ public interface HCNetSDK extends Library {
         public int dwXmlLen;//XML透传数据长度, 即EventNotificationAlert XML Block的数据长度
         public Pointer pXmlBuf; // XML报警信息指针,其XML对应到EventNotificationAlert XML Block
         public byte[] byRes2 = new byte[8];
+
         public void read() {
             super.read();
             switch (byMode) {
@@ -3281,8 +3278,8 @@ DVR实现巡航数据结构
         public byte byTransProtocol;            /* 传输协议类型 0-TCP 1-UDP */
         public byte byTransMode;                /* 传输码流模式 0－主码流 1－子码流*/
         public byte[] byRes = new byte[3];
-        public byte[] sUserName = new byte[NAME_LEN];            /* 监控主机登陆帐号 */
-        public byte[] sPassword = new byte[PASSWD_LEN];            /* 监控主机密码 */
+        public byte[] sUserName = new byte[NAME_LEN];            /* 布防主机登陆帐号 */
+        public byte[] sPassword = new byte[PASSWD_LEN];            /* 布防主机密码 */
     }
 
     public static class NET_DVR_MATRIX_DYNAMIC_DEC extends Structure {//启动/停止动态解码
@@ -3323,13 +3320,13 @@ DVR实现巡航数据结构
     //2007-05-25  多路解码器数字矩阵配置
 //矩阵行信息 2007-12-28
     public static class NET_DVR_MATRIX_ROW_ELEMENT extends Structure {
-        public byte[] sSurvChanName = new byte[128];            /* 监控通道名称，支持中文 */
+        public byte[] sSurvChanName = new byte[128];            /* 布防通道名称，支持中文 */
         public int dwRowNum;                /* 行号 */
         public NET_DVR_MATRIX_DECINFO struDecChanInfo;        /* 矩阵行信息 */
     }
 
     public static class NET_DVR_MATRIX_ROW_INDEX extends Structure {
-        public byte[] sSurvChanName = new byte[128];            /* 监控通道名称，支持中文 */
+        public byte[] sSurvChanName = new byte[128];            /* 布防通道名称，支持中文 */
         public int dwRowNum;                /* 行号 */
     }
 
@@ -3351,12 +3348,12 @@ DVR实现巡航数据结构
         public int dwSize;
         /*
          *	以下三个参数只需要指定其中一个便可指定数字矩阵里的某一行
-         *	所代表的远程监控通道。
+         *	所代表的远程布防通道。
          *	如果指定了多个域并有冲突，设备将按照域的先后顺序为准取最先定义者。
          */
         public int dwRowNum;            /* -1代表无效域,大于0者方为有效的矩阵行号 */
-        public byte[] sSurvChanName = new byte[128];    /* 监控通道名,是否无效按字符串的有效性判断 */
-        public int dwSurvNum;            /* 监控通道号,按矩阵行列表的顺序指定，一般情况下与行号一致 */
+        public byte[] sSurvChanName = new byte[128];    /* 布防通道名,是否无效按字符串的有效性判断 */
+        public int dwSurvNum;            /* 布防通道号,按矩阵行列表的顺序指定，一般情况下与行号一致 */
         /*
          *	以下两项只需要指定其中一项便可，如果两项都有效默认选择第一项
          */
@@ -3364,7 +3361,7 @@ DVR实现巡航数据结构
         public int dwLocalDispChanNum;
         /*
          *	0代表播放即时码流，
-         *	1表示按时间回访远程监控设备的文件
+         *	1表示按时间回访远程布防设备的文件
          *	2表示按文件名回访
          */
         public int dwTimeSel;
@@ -3683,8 +3680,8 @@ DVR实现巡航数据结构
         public byte bySubDispChan;//显示通道子通道号，智能配置时使用
         public byte byResolution;    //; 1-CIF 2-4CIF 3-720P 4-1080P 5-500w大屏控制器使用，大屏控制器会根据该参数分配解码资源
         public byte[] byRes = new byte[2];
-        public byte[] sUserName = new byte[NAME_LEN];    //监控主机登陆帐号
-        public byte[] sPassword = new byte[PASSWD_LEN];    //监控主机密码
+        public byte[] sUserName = new byte[NAME_LEN];    //布防主机登陆帐号
+        public byte[] sPassword = new byte[PASSWD_LEN];    //布防主机密码
     }
 
     public static class NET_DVR_STREAM_MEDIA_SERVER extends Structure {
@@ -3708,8 +3705,8 @@ DVR实现巡航数据结构
         public byte byFactoryType;            //前端设备厂家类型,通过接口获取
         public int dwChannel; //通道号
         public byte[] byStreamId = new byte[STREAM_ID_LEN]; //流ID
-        public byte[] sUserName = new byte[NAME_LEN];    //监控主机登陆帐号
-        public byte[] sPassword = new byte[PASSWD_LEN];    //监控主机密码
+        public byte[] sUserName = new byte[NAME_LEN];    //布防主机登陆帐号
+        public byte[] sPassword = new byte[PASSWD_LEN];    //布防主机密码
         public short wDevPort;                //前端设备通信端口
         public byte[] byRes2 = new byte[2];
     }
@@ -3967,7 +3964,7 @@ DVR实现巡航数据结构
         public int lChannel;//通道号
         public int dwStreamType;    // 码流类型，0-主码流，1-子码流，2-码流3，3-码流4, 4-码流5,5-码流6,7-码流7,8-码流8,9-码流9,10-码流10
         public int dwLinkMode;// 0：TCP方式,1：UDP方式,2：多播方式,3 - RTP方式，4-RTP/RTSP,5-RSTP/HTTP ,6- HRUDP（可靠传输） ,7-RTSP/HTTPS
-        public HWND hPlayWnd;//播放窗口的句柄,为NULL表示不播放图象
+        public int hPlayWnd;//播放窗口的句柄,为NULL表示不播放图象
         public int bBlocked;  //0-非阻塞取流, 1-阻塞取流, 如果阻塞SDK内部connect失败将会有5s的超时才能够返回,不适合于轮询取流操作.
         public int bPassbackRecord; //0-不启用录像回传,1启用录像回传
         public byte byPreviewMode;//预览模式，0-正常预览，1-延迟预览
@@ -4490,7 +4487,7 @@ DVR实现巡航数据结构
         public byte byAlarmTypeURL;//bit0-表示人脸抓拍报警上传（INTER_FACESNAP_RESULT）；0-表示二进制传输，1-表示URL传输（设备支持的情况下，设备支持能力根据具体报警能力集判断,同时设备需要支持URL的相关服务，当前是”云存储“）
         //bit1-表示EVENT_JSON中图片数据长传类型；0-表示二进制传输，1-表示URL传输（设备支持的情况下，设备支持能力根据具体报警能力集判断）
         //bit2 - 人脸比对(报警类型为COMM_SNAP_MATCH_ALARM)中图片数据上传类型：0 - 二进制传输，1 - URL传输
-        //bit3 - 行为分析(报警类型为COMM_ALARM_RULE)中图片数据上传类型：0 - 二进制传输，1 - URL传输，本字段设备是否支持，对应软硬件能力集中<isSupportBehaviorUploadByCloudStorageURL>节点是否返回且为true
+        //bit3 - 异常行为检测(报警类型为COMM_ALARM_RULE)中图片数据上传类型：0 - 二进制传输，1 - URL传输，本字段设备是否支持，对应软硬件能力集中<isSupportBehaviorUploadByCloudStorageURL>节点是否返回且为true
         public byte byCustomCtrl;//Bit0- 表示支持副驾驶人脸子图上传: 0-不上传,1-上传
         public byte[] byRes4 = new byte[128];
     }
@@ -4565,7 +4562,7 @@ DVR实现巡航数据结构
         public NET_VCA_TRAVERSE_PLANE struTraversePlane;  //警戒参数
         public NET_VCA_AREA struArea; //进入/离开区域参数
         public NET_VCA_INTRUSION struIntrusion; //区域入侵参数
-        public NET_VCA_LEAVE_POSITION   struLeavePos;        //离岗参数
+        public NET_VCA_LEAVE_POSITION struLeavePos;        //离岗参数
 
     }
 
@@ -4582,8 +4579,7 @@ DVR实现巡航数据结构
 
     //根据报警延迟时间来标识报警中带图片，报警间隔和IO报警一致，1秒发送一个。
 //入侵参数
-    public static class NET_VCA_INTRUSION extends Structure
-    {
+    public static class NET_VCA_INTRUSION extends Structure {
         public NET_VCA_POLYGON struRegion;//区域范围
         public short wDuration;            //行为事件触发时间阈值: 1-120秒，建议5秒，判断是有效报警的时间  在ATM系统中触发文件阈值为 1-1000秒
         public byte bySensitivity;        //灵敏度参数，范围[1-100]
@@ -4614,12 +4610,12 @@ DVR实现巡航数据结构
 
     public static class NET_DVR_HANDLEEXCEPTION_V40 extends Structure {
         public int dwHandleType;/*处理方式，各种异常处理方式的"或"结果，异常处理方式：
-                                    0x00: 无响应    0x01: 监视器上警告  0x02: 声音警告  0x04: 上传中心
+                                    0x00: 无响应    0x01: 布防器上警告  0x02: 声音警告  0x04: 上传中心
                                     0x08: 触发报警输出  0x10: Jpeg抓图并上传EMail
                                     0x20: 无线声光报警器联动    0x40: 联动电子地图(目前仅PCNVR支持)
                                     0x200：抓图并上传ftp    0x400: 虚焦侦测联动聚焦
-                                    0x800: PTZ联动跟踪(球机跟踪目标)
-                                    E.g. dwHandleType==0x01|0x04 表示配置报警发生时联动监视器上警告并且将报警信息上传中心。 */
+                                    0x800: PTZ联动(球机目标)
+                                    E.g. dwHandleType==0x01|0x04 表示配置报警发生时联动布防器上警告并且将报警信息上传中心。 */
         public int dwMaxRelAlarmOutChanNum;/*设备最大支持的触发报警输出通道数（只读） */
         public int dwRelAlarmOutChanNum;/*已配置的触发的报警输出通道个数，决定dwRelAlarmOut取前多少个数组下标 */
         public int[] dwRelAlarmOut = new int[MAX_CHANNUM_V30];/*触发报警输出通道，取数组前dwRelAlarmOutChanNum个值，
@@ -4644,8 +4640,6 @@ DVR实现巡航数据结构
         public NET_DVR_SCHEDTIME[] struHolidayTime = new NET_DVR_SCHEDTIME[MAX_TIMESEGMENT_V30]; //假日布防时间
         public byte[] byRes2 = new byte[100];
     }
-
-
 
 
     //快速移动参数
@@ -4765,7 +4759,7 @@ DVR实现巡航数据结构
         public byte[] byRes = new byte[11];       //保留
     }
 
-    //行为分析报警
+    //异常行为检测报警
     public static class NET_VCA_RULE_ALARM extends Structure {
         public int dwSize;
         public int dwRelativeTime;
@@ -4885,7 +4879,7 @@ DVR实现巡航数据结构
         public byte[] byRes1 = new byte[4];           //保留，设置为0字段
         public short wEventType;        //行为事件类型，参考VCA_RULE_EVENT_TYPE_EX
         public byte[] byRuleName = new byte[NAME_LEN/*32*/];        //规则名称
-        public NET_VCA_EVENT_UNION uEventParam;            //行为分析事件参数
+        public NET_VCA_EVENT_UNION uEventParam;            //异常行为检测事件参数
         public NET_VCA_SIZE_FILTER struSizeFilter;          //尺寸过滤器
         public NET_DVR_SCHEDTIMEWEEK[] struAlarmTime = new NET_DVR_SCHEDTIMEWEEK[MAX_DAYS];//布防时间
         public NET_DVR_HANDLEEXCEPTION_V40 struAlarmHandleType; /*处理方式*/
@@ -4908,7 +4902,7 @@ DVR实现巡航数据结构
         public byte[] byRes2 = new byte[40];
     }
 
-    //行为分析配置结构体
+    //异常行为检测配置结构体
     public static class NET_VCA_RULECFG_V42 extends Structure {
         public int dwSize;             //结构图大小
         public byte byPicProType;            //报警时图片处理方式 0-不处理 1-上传
@@ -4918,10 +4912,10 @@ DVR实现巡航数据结构
         public NET_DVR_JPEGPARA struPicParam;         //图片规格结构
         public NET_VCA_ONE_RULE_V42[] struRule = new NET_VCA_ONE_RULE_V42[16];       /* 规则数组*/
         public short[] wRelSnapChan = new short[3]; //关联抓图通道，当主通道报警时，同时会上传关联通道的抓拍图片，0表示不关联，其他值为关联通道号
-        public byte byTrackEnable; //是否启用跟踪
+        public byte byTrackEnable; //是否启用
         public byte byRes2;
         public NET_DVR_PTZ_POSITION struPTZPosition;  //场景位置信息
-        public short wTrackDuration; //跟踪持续时间，单位s
+        public short wTrackDuration; //持续时间，单位s
         public short wIntervalTime; //单次报警间隔时间（秒）[1-7200]（默认为600）
         public short wHeightLimit;//目标检测高度下限（厘米）[0-250]（默认为80cm），小于此高度的目标将不作为目标进行检测
         public byte[] byRes = new byte[58];//保留
@@ -5110,25 +5104,6 @@ DVR实现巡航数据结构
         public Pointer pBuffer2;
     }
 
-    // 称重设备
-    public static class NET_DVR_VEHICLE_WEIGHT_RESULT extends Structure{
-        public byte byIsOverWeight;         //是否超限
-        public byte byAxleNum;            //轴数
-        public int wAxleModel;           //参考 enum TRUCK_AXLE_MODEL,可以根据类型解析出轴的个数
-        public float fOverWeight;          //超限重量(吨)，实际值扩大1000倍传输（实际值精确到小数点后三位）
-        public float fWeight;              //车身重量(吨)，实际值扩大1000倍传输（实际值精确到小数点后三位）
-        public float fLimitWeight;         //限制重量(吨)，实际值扩大1000倍传输（实际值精确到小数点后三位）
-        public  float fAxleLen;             //轴距(米)，实际值扩大100倍传输（实际值精确到小数点后两位）
-        public byte[] sDevDescInfo = new byte[MAX_NOTICE_THEME_LEN];      //设备描述信息
-        public int[]  wAxleWeight = new int[VCA_MAX_POLYGON_POINT_NUM];    //车轴重量，单位千克（kg）第i个元素表示第i个轴重
-        public int[]  wAxleDistance = new int[VCA_MAX_POLYGON_POINT_NUM];  //车轴间距，单位毫米(mm).第i个元素表示第i轴和第i+1轴的间距
-        public float dwLength;        //车长，单位cm
-        public float dwWidth;        //车宽，单位cm
-        public float dwHeight;        //车高，单位cm
-        public byte byTollwayVehicleType;     //收费公路车型，参考TOOLWAY_VEHICLE_TYPE
-        public byte[] byRes2 = new byte[11];            //预留
-    }
-
     public static class NET_DVR_TIME_V30 extends Structure {
         public short wYear;
         public byte byMonth;
@@ -5208,63 +5183,6 @@ DVR实现巡航数据结构
         public NET_ITS_PICTURE_INFO[] struPicInfo = new NET_ITS_PICTURE_INFO[6];
     }
 
-    public static class NET_DVR_PLATE_RESULT_V50 extends Structure {
-        public int  dwSize;        //结构长度
-        public int   dwMatchNo;        //匹配序号,由(车辆序号,数据类型,车道号)组成匹配码
-        public byte    byGroupNum;    //图片组数量（一辆过车相机多次抓拍的数量，代表一组图片的总数，用于延时匹配数据）
-        public byte    byPicNo;        //连拍的图片序号（接收到图片组数量后，表示接收完成;接收超时不足图片组数量时，根据需要保留或删除）
-        public byte    bySecondCam;    //是否第二相机抓拍（如远近景抓拍的远景相机，或前后抓拍的后相机，特殊项目中会用到）
-        public byte    byFeaturePicNo; //闯红灯电警，取第几张图作为特写图,0xff-表示不取
-        public byte    byDriveChan;        //触发车道号
-        public byte    byVehicleType;     //车辆类型，参考VTR_RESULT
-        public byte    byDetSceneID;//检测场景号[1,4], IPC默认是0
-        //车辆属性，按位表示，0- 无附加属性(普通车)，bit1- 黄标车(类似年检的标志)，bit2- 危险品车辆，值：0- 否，1- 是
-        //该节点已不再使用,使用下面的byYellowLabelCar和byDangerousVehicles判断是否黄标车和危险品车
-        public byte    byVehicleAttribute;
-        public short    wIllegalType;       //违章类型采用国标定义
-        public byte[] byIllegalSubType = new byte[8];   //违章子类型
-        public byte    byPostPicNo;    //违章时取第几张图片作为卡口图,0xff-表示不取
-        public byte    byChanIndex;        //通道号（保留）
-        public byte    wSpeedLimit;        //限速上限（超速时有效）
-        public byte    byChanIndexEx;      //byChanIndexEx*256+byChanIndex表示真实通道号。
-        public byte    byVehiclePositionControl;  /*车辆位置布控标志,0~为普通车牌识别报警,1~为车辆位置布控触发报警
-                                       (即通过PUT /ISAPI/Traffic/channels/<ID>/vehiclePositionControl?format=json触发)*/
-        public NET_DVR_PLATE_INFO struPlateInfo;     //车牌信息结构
-        public NET_DVR_VEHICLE_INFO struVehicleInfo;    //车辆信息
-        public byte[] byMonitoringSiteID = new byte[48];        //监测点编号
-        public byte[] byDeviceID = new byte[48];                //设备编号
-        public byte    byDir;            //监测方向，1-上行（反向），2-下行(正向)，3-双向，4-由东向西，5-由南向北,6-由西向东，7-由北向南，8-其它
-        public byte    byDetectType;    //检测方式,1-地感触发，2-视频触发，3-多帧识别，4-雷达触发
-        //关联车道方向类型，参考ITC_RELA_LANE_DIRECTION_TYPE
-        //该参数为车道方向参数，与关联车道号对应，确保车道唯一性。
-        public byte    byRelaLaneDirectionType;
-        public byte    byCarDirectionType; //车辆具体行驶的方向，0表示从上往下，1表示从下往上（根据实际车辆的行驶方向来的区分）,2表示未知
-        //当wIllegalType参数为空时，使用该参数。若wIllegalType参数为有值时，以wIllegalType参数为准，该参数无效。
-        public int   dwCustomIllegalType; //违章类型定义(用户自定义)
-        /*为0~数字格式时，为老的违章类型，wIllegalType、dwCustomIllegalType参数生效，赋值国标违法代码。
-        为1~字符格式时，pIllegalInfoBuf参数生效。老的违章类型，wIllegalType、dwCustomIllegalType参数依然赋值国标违法代码*/
-        public Pointer   pIllegalInfoBuf;    //违法代码字符信息结构体指针；指向NET_ITS_ILLEGAL_INFO
-        public  byte    byIllegalFromatType; //违章信息格式类型； 0~数字格式， 1~字符格式
-        public byte    byPendant;// 0-表示未知,1-车窗有悬挂物，2-车窗无悬挂物
-        public  byte    byDataAnalysis;            //0-数据未分析, 1-数据已分析
-        public byte    byYellowLabelCar;        //0-表示未知, 1-非黄标车,2-黄标车
-        public byte    byDangerousVehicles;    //0-表示未知, 1-非危险品车,2-危险品车
-        //以下字段包含Pilot字符均为主驾驶，含Copilot字符均为副驾驶
-        public byte    byPilotSafebelt;//0-表示未知,1-系安全带,2-不系安全带
-        public  byte    byCopilotSafebelt;//0-表示未知,1-系安全带,2-不系安全带
-        public  byte    byPilotSunVisor;//0-表示未知,1-不打开遮阳板,2-打开遮阳板
-        public byte    byCopilotSunVisor;//0-表示未知, 1-不打开遮阳板,2-打开遮阳板
-        public byte    byPilotCall;// 0-表示未知, 1-不打电话,2-打电话
-        //0-开闸，1-未开闸 (专用于历史数据中相机根据名单匹配后，是否开闸成功的标志)
-        public  byte    byBarrierGateCtrlType;
-        public  byte    byAlarmDataType;//0-实时数据，1-历史数据
-        public NET_DVR_TIME_V30 struSnapFirstPicTime;//端点时间(ms)（抓拍第一张图片的时间）
-        public int   dwIllegalTime;//违法持续时间（ms） = 抓拍最后一张图片的时间 - 抓拍第一张图片的时间
-        public int   dwPicNum;        //图片数量（与picGroupNum不同，代表本条信息附带的图片数量，图片信息由struVehicleInfoEx定义
-        public NET_ITS_PICTURE_INFO[] struPicInfo = new NET_ITS_PICTURE_INFO[6];;         //图片信息,单张回调，最多6张图，由序号区分
-        public NET_DVR_VEHICLE_WEIGHT_RESULT struWeightResult; //车辆称重
-        public byte[] byRes = new byte[256];//预留
-    }
     public int MAX_PARKNO_LEN = 16; //车位编号长度
     public int MAX_ID_LEN = 48; //编号最大长度
 
@@ -5319,7 +5237,7 @@ DVR实现巡航数据结构
     }
 
 
-    public static class NET_DVR_AGEGROUP_PARAM extends Structure {
+    public static class NET_DVR_GROUP_PARAM extends Structure {
         public int dwTeenage;//少年（人数）
         public int dwYouth;//青年（人数）
         public int dwMidLife;//中年（人数）
@@ -5350,7 +5268,7 @@ DVR实现巡航数据结构
         public byte byStatType;//数据类型统计：Bit0-年龄段有效，Bit1-性别有效，Bit2-人数有效
         public byte[] byRes = new byte[7];
         public int dwPeopleNum;//人数统计
-        public NET_DVR_AGEGROUP_PARAM struAgeGroupParam;//年龄段人数统计
+        public byte[] byRes2 = new byte[80]; //
         public NET_DVR_SEXGROUP_PARAM struSexGroupParam;//性别人数统计
         public NET_DVR_PROGRAM_INFO struProgramInfo;        //节目信息
         public byte[] byRes1 = new byte[76];
@@ -5373,7 +5291,7 @@ DVR实现巡航数据结构
        Bit10-最低速度有效
        Bit11-最高速度有效
        Bit12-数据类型有效
-       Bit13-布控方式类型有效
+       Bit13-布防方式类型有效
        Bit14-违法取证有效
        Bit15-事件类型有效
        Bit16-取证类型有效
@@ -5385,7 +5303,7 @@ DVR实现巡航数据结构
         public byte[] sLicense = new byte[MAX_LICENSE_LEN/*16*/];//(设备支持模糊查询, GB2312编码)
         /*
        Bit0-未知（其他）
-       Bit1-标准民用车与军车
+       Bit1-标准民用车与特种车
        Bit2-02式民用车牌
        Bit3-武警车
        Bit4-警车
@@ -5490,7 +5408,7 @@ DVR实现巡航数据结构
         public short wMinSpeed;//最低速度（0~999）单位km/h
         public short wMaxSpeed;//最高速度（0~999）单位km/h
         public byte byDataType;//数据类型 0-卡口数据，1-违法数据，2-交通事件，3-取证数据 （仅单选）
-        public byte byExecuteCtrl;//布控 0-允许名单，1-禁止名单，0xff-其他
+        public byte byExecuteCtrl;//布防 0-允许名单，1-禁止名单，0xff-其他
         public byte[] byRes = new byte[254];
     }
 
@@ -5503,7 +5421,7 @@ DVR实现巡航数据结构
         public byte[] sLicense = new byte[MAX_LICENSE_LEN/*16*/];
         /*
     Bit0-未知（其他）
-    Bit1-标准民用车与军车
+    Bit1-标准民用车与特种车
     Bit2-02式民用车牌
     Bit3-武警车
     Bit4-警车
@@ -6266,7 +6184,7 @@ DVR实现巡航数据结构
         public byte byUploadCapPic;     //联动抓拍是否上传图片，0-不上传，1-上传
         public byte bySaveCapPic;    //是否保存抓拍图片，0-不保存，1-保存
         public byte byInputCardNo;  //是否是否允许按键输入卡号，0-不允许，1-允许
-        public byte byEnableWifiDetect;  //是否启动wifi探针，0-不启动，1-启动
+        public byte byEnableWifiDetect;  //是否启动wifi，0-不启动，1-启动
         public byte byEnable3G4G;  //3G4G使能，0-不使能，1-使能
         public byte byProtocol;//读卡器通信协议类型，0-私有协议（默认），1-OSDP协议
         public byte[] byRes = new byte[500];
@@ -6348,16 +6266,17 @@ DVR实现巡航数据结构
     }
 
     //防区报警信息结构体
-    public static class  NET_DVR_ZONE_ALARM_INFO extends Structure {
-        public byte[]  byZoneName = new byte[NAME_LEN]; //防区名称
+    public static class NET_DVR_ZONE_ALARM_INFO extends Structure {
+        public byte[] byZoneName = new byte[NAME_LEN]; //防区名称
         public int dwZonendex;//防区号
         public byte byZoneType;//防区类型 ENUM_ALARM_ZONE_TYPE_MANUAL-紧急开关报警;ENUM_ALARM_ZONE_TYPE_MAGNETIC-门磁报警;ENUM_ALARM_ZONE_TYPE_SMOKE-烟感报警;ENUM_ALARM_ZONE_TYPE_ACTIVE_INFRARED-主动红外报警;ENUM_ALARM_ZONE_TYPE_PASSIVE_INFRARED-被动红外报警;ENUM_ALARM_ZONE_TYPE_GAS-煤气报警
         public byte[] byRes = new byte[219]; //保留,置为0
     }
+
     //可视对讲报警信息联合体
     public static class NET_DVR_VIDEO_INTERCOM_ALARM_INFO_UNION extends Union {
         public byte[] byLen = new byte[256]; //联合体大小
-        public  NET_DVR_ZONE_ALARM_INFO struZoneAlarm = new NET_DVR_ZONE_ALARM_INFO(); //开锁记录
+        public NET_DVR_ZONE_ALARM_INFO struZoneAlarm = new NET_DVR_ZONE_ALARM_INFO(); //开锁记录
     }
 
     //可视对讲报警信息结构体
@@ -6365,11 +6284,11 @@ DVR实现巡航数据结构
         public int dwSize; //结构体大小
         public NET_DVR_TIME_EX struTime = new NET_DVR_TIME_EX(); //时间
         public byte[] byDevNumber = new byte[MAX_DEV_NUMBER_LEN]; //设备编号
-        public byte  byAlarmType;//报警类型：1- 防区报警，2- 防拆报警，3- 劫持报警，4- 多次密码开锁失败报警，5- 门没开，6- 门没关，7- SOS(呼救报警)，8- 通话对讲，9- 智能锁劫持指纹报警，
-        // 10- 智能锁劫持密码报警，11- 智能锁撬门报警，12- 智能锁门锁锁定报警，13- 智能锁电量不足报警, 14-黑名单报警, 15-智能锁掉线, 16-门禁安全模块防拆报警
+        public byte byAlarmType;//报警类型：1- 防区报警，2- 防拆报警，3- 劫持报警，4- 多次密码开锁失败报警，5- 门没开，6- 门没关，7- SOS(呼救报警)，8- 通话对讲，9- 智能锁劫持指纹报警，
+        // 10- 智能锁劫持密码报警，11- 智能锁撬门报警，12- 智能锁门锁锁定报警，13- 智能锁电量不足报警, 14-禁止名单报警, 15-智能锁掉线, 16-门禁安全模块防拆报警
         public byte[] byRes1 = new byte[3]; //保留
         public NET_DVR_VIDEO_INTERCOM_ALARM_INFO_UNION uAlarmInfo = new NET_DVR_VIDEO_INTERCOM_ALARM_INFO_UNION(); //报警信息，byAlarmType为1时有效
-        public short  wLockID;    //锁ID，（0-表示门口机本机控制器上接的锁、1-表示外接控制器上接的锁）（报警类型为5和6时有效）
+        public short wLockID;    //锁ID，（0-表示门口机本机控制器上接的锁、1-表示外接控制器上接的锁）（报警类型为5和6时有效）
         public byte[] byRes2 = new byte[254]; //保留，置为0
     }
 
@@ -6403,7 +6322,7 @@ DVR实现巡航数据结构
         public byte byLockType; //锁类型，0-普通（以前默认都为0）,1-智能锁
         public short wLockID; //锁ID，从1开始（远程开门口机锁时，0表示门口机本机控制器上接的锁、1表示外接控制器上接的锁）
         public byte[] byControlSrc = new byte[NAME_LEN]; //操作发起源信息
-        public byte byControlType; //开锁类型，1-监视，2-通话
+        public byte byControlType; //开锁类型，1-布防，2-通话
         public byte[] byRes3 = new byte[3];
         public byte[] byPassword = new byte[PASSWD_LEN];       //锁密码，当byLockType为智能锁时有效
         public byte[] byRes2 = new byte[108]; //保留
@@ -6449,7 +6368,7 @@ DVR实现巡航数据结构
         public NET_DVR_DATE struEndDate;  //有效截止日期
         public byte byTermOfValidity;  //是否长期有效， 0-否，1-是（有效截止日期无效）
         public byte bySex;  //性别，1-男，2-女
-        public byte byNation; //民族
+        public byte byNation; //
         public byte[] byRes = new byte[101];
     }
 
@@ -6640,9 +6559,9 @@ DVR实现巡航数据结构
         public int dwEndSerialNo; //结束流水号（为0时默认全部）
         public int dwIOTChannelNo; //IOT通道号，0-无效
         public short wInductiveEventType; //归纳事件类型，0-无效，其他值参见2.2章节，客户端判断该值为非0值后，报警类型通过归纳事件类型区分，否则通过原有报警主次类型（dwMajor、dwMinor）区分
-        public byte bySearchType;      //搜索方式：0-保留，1-按事件源搜索（此时通道号为非视频通道号），2-按监控点ID搜索
+        public byte bySearchType;      //搜索方式：0-保留，1-按事件源搜索（此时通道号为非视频通道号），2-按布防点ID搜索
         public byte byEventAttribute; //事件属性：0-未定义，1-合法事件，2-其它
-        public byte[] szMonitorID = new byte[NET_SDK_MONITOR_ID_LEN/*64*/];          //监控点ID（由设备序列号、通道类型、编号组成，例如门禁点：设备序列号+“DOOR”+门编号）
+        public byte[] szMonitorID = new byte[NET_SDK_MONITOR_ID_LEN/*64*/];          //布防点ID（由设备序列号、通道类型、编号组成，例如门禁点：设备序列号+“DOOR”+门编号）
         public byte[] byEmployeeNo = new byte[NET_SDK_EMPLOYEE_NO_LEN]; //工号（人员ID）
         public byte[] byRes = new byte[140]; //保留
     }
@@ -7045,7 +6964,7 @@ DVR实现巡航数据结构
         public byte bySpecificVehicleType;     //具体车辆种类  参考识别结果类型VTR_RESULT
         public byte byLaneNo;  //关联车道号
         public byte[] byRes1 = new byte[2]; //保留
-        public NET_DVR_TIME_V30 struTime = new NET_DVR_TIME_V30();//手动跟踪定位，当前时间。
+        public NET_DVR_TIME_V30 struTime = new NET_DVR_TIME_V30();//手动定位，当前时间。
         public int dwSerialNo;//序号；
         public byte byVehicleAttribute;//车辆属性，按位表示，0- 无附加属性(普通车)，bit1- 黄标车(类似年检的标志)，bit2- 危险品车辆，值：0- 否，1- 是
         public byte byPilotSafebelt;//0-表示未知,1-系安全带,2-不系安全带
@@ -7154,12 +7073,12 @@ DVR实现巡航数据结构
 
     //人体特征识别结果结构体
     public static class NET_VCA_HUMAN_FEATURE extends Structure {
-        public byte byAgeGroup;    //年龄段,参见 HUMAN_AGE_GROUP_ENUM
+        public byte byRes3;
         public byte bySex;         //性别, 0-表示“未知”（算法不支持）,1 – 男 , 2 – 女, 0xff-算法支持，但是没有识别出来
         public byte byEyeGlass;    //是否戴眼镜 0-表示“未知”（算法不支持）,1 – 不戴, 2 – 戴,0xff-算法支持，但是没有识别出来
         //抓拍图片人脸年龄的使用方式，如byAge为15,byAgeDeviation为1,表示，实际人脸图片年龄的为14-16之间
-        public byte byAge;//年龄 0-表示“未知”（算法不支持）,0xff-算法支持，但是没有识别出来
-        public byte byAgeDeviation;//年龄误差值
+        public byte byRes4;// 0-表示“未知”（算法不支持）,0xff-算法支持，但是没有识别出来
+        public byte byDeviation;//误差值
         public byte byRes0;   //字段预留
         public byte byMask;       //是否戴口罩 0-表示“未知”（算法不支持）,1 – 不戴, 2 – 戴, 0xff-算法支持，但是没有识别出来
         public byte bySmile;      //是否微笑 0-表示“未知”（算法不支持）,1 – 不微笑, 2 – 微笑, 0xff-算法支持，但是没有识别出来
@@ -7236,9 +7155,9 @@ DVR实现巡航数据结构
         public byte bySex;//性别，0-未知，1-男，2-女
         public byte byGlasses;//是否带眼镜，0-未知，1-是，2-否
         //抓拍图片人脸年龄的使用方式，如byAge为15,byAgeDeviation为1,表示，实际人脸图片年龄的为14-16之间
-        public byte byAge;//年龄
-        public byte byAgeDeviation;//年龄误差值
-        public byte byAgeGroup;//年龄段，详见HUMAN_AGE_GROUP_ENUM，若传入0xff表示未知
+        public byte byRes2;//
+        public byte byDeviation;//误差值
+        public byte byGroup;//段，详见HUMAN_GROUP_ENUM，若传入0xff表示未知
         public byte byFacePicQuality;
         public byte byRes1;              // 保留字节
         public int dwUIDLen; // 上传报警的标识长度
@@ -7268,31 +7187,31 @@ DVR实现巡航数据结构
         public byte[] byCertificateNumber = new byte[NAME_LEN];  //证件号
         public int dwPersonInfoExtendLen;// 人员标签信息扩展长度
         public Pointer pPersonInfoExtend;  //人员标签信息扩展信息
-        public byte byAgeGroup;//年龄段，详见HUMAN_AGE_GROUP_ENUM，如传入0xff表示未知
+        public byte byGroup;//段，，如传入0xff表示未知
         public byte[] byRes2 = new byte[11];
     }
 
 
-    //黑名单报警信息
+    //禁止名单报警信息
     public static class NET_VCA_BLOCKLIST_INFO_ALARM extends Structure {
-        public NET_VCA_BLOCKLIST_INFO struBlockListInfo = new NET_VCA_BLOCKLIST_INFO(); //黑名单基本信息
-        public int dwBlockListPicLen;       //黑名单人脸子图的长度，为0表示没有图片，大于0表示有图片
+        public NET_VCA_BLOCKLIST_INFO struBlockListInfo = new NET_VCA_BLOCKLIST_INFO(); //禁止名单基本信息
+        public int dwBlockListPicLen;       //禁止名单人脸子图的长度，为0表示没有图片，大于0表示有图片
         public int dwFDIDLen;// 人脸库ID长度
         public Pointer pFDID;  //人脸库Id指针
         public int dwPIDLen;// 人脸库图片ID长度
         public Pointer pPID;  //人脸库图片ID指针
         public short wThresholdValue; //人脸库阈值[0,100]
         public byte[] byRes = new byte[2];              // 保留字节
-        public Pointer pBuffer1;  //黑名单人脸子图的图片数据
+        public Pointer pBuffer1;  //禁止名单人脸子图的图片数据
     }
 
-    //黑名单信息
+    //禁止名单信息
     public static class NET_VCA_BLOCKLIST_INFO extends Structure {
         public int dwSize;   //结构大小
         public int dwRegisterID;  //名单注册ID号（只读）
         public int dwGroupNo; //分组号
-        public byte byType; //黑白名单标志：0-全部，1-白名单，2-黑名单
-        public byte byLevel; //黑名单等级，0-全部，1-低，2-中，3-高
+        public byte byType; //禁止/运行允许名单标志：0-全部，1-允许名单，2-禁止名单
+        public byte byLevel; //禁止名单等级，0-全部，1-低，2-中，3-高
         public byte[] byRes1 = new byte[2];  //保留
         public NET_VCA_HUMAN_ATTRIBUTE struAttribute = new NET_VCA_HUMAN_ATTRIBUTE();  //人员信息
         public byte[] byRemark = new byte[NAME_LEN]; //备注信息
@@ -7322,7 +7241,7 @@ DVR实现巡航数据结构
         public byte byModelingStatus;// 建模状态
         public byte byLivenessDetectionStatus;//活体检测状态：0-保留，1-未知（检测失败），2-非真人人脸，3-真人人脸，4-未开启活体检测
         public byte cTimeDifferenceH;         /*与UTC的时差（小时），-12 ... +14， +表示东区,0xff无效*/
-        public byte cTimeDifferenceM;      	/*与UTC的时差（分钟），-30, 30, 45， +表示东区，0xff无效*/
+        public byte cTimeDifferenceM;        /*与UTC的时差（分钟），-30, 30, 45， +表示东区，0xff无效*/
         public byte byMask;                //抓拍图是否戴口罩，0-保留，1-未知，2-不戴口罩，3-戴口罩
         public byte bySmile;               //抓拍图是否微笑，0-保留，1-未知，2-不微笑，3-微笑
         public byte byContrastStatus;      //比对结果，0-保留，1-比对成功，2-比对失败
@@ -7565,11 +7484,11 @@ DVR实现巡航数据结构
         public byte[] byRes = new byte[672];                /*保留*/
     }
 
-    //行为分析
+    //异常行为检测
     public static class EVENT_VCAPARAM_V50 extends Structure {
-        //行为分析对应的通道，按值表示,采用紧凑型排列，0xffff表示后续无效
+        //异常行为检测对应的通道，按值表示,采用紧凑型排列，0xffff表示后续无效
         public short[] wChanNo = new short[MAX_CHANNUM_V30];
-        public byte byRuleID;      //行为分析类型，规则0xff表示全部，从0开始
+        public byte byRuleID;      //异常行为检测类型，规则0xff表示全部，从0开始
         public byte byDriverBehaviortType;  //司机驾驶行为类型：0-保留、1-抽烟、2-接打电话、3-疲劳驾驶、4-分神提醒、5-驾驶员异常、6-未系安全带、7-红外阻断墨镜
         public byte byADASType;  //高级辅助驾驶类型：0-保留、1-前向碰撞、2-车道偏离、3-盲区检测、4-车距检测、5-行人防撞、6-急加速、7-急减速、8-急左转弯、9-急右转弯、10-车辆翻车、11-未礼让行人
         public byte byGSensorType;  // G-Sensor事件：0-保留、1-急加速、2-急减速、3-急左转弯、4-急右转弯、5-车辆翻车、6-车辆碰撞
@@ -7725,7 +7644,7 @@ DVR实现巡航数据结构
         public byte[] byRes = new byte[796];
     }
 
-    //行为分析结果
+    //异常行为检测结果
     public static class EVENT_VCARET_V50 extends Structure {
         public int dwChanNo;                    //触发事件的通道号
         public byte byRuleID;                    //规则ID
@@ -8006,7 +7925,7 @@ DVR实现巡航数据结构
     public static class NET_DVR_HANDLEEXCEPTION_V41 extends Structure {
         public int dwHandleType;        //异常处理,异常处理方式的"或"结果
         /*0x00: 无响应*/
-        /*0x01: 监视器上警告*/
+        /*0x01: 布防器上警告*/
         /*0x02: 声音警告*/
         /*0x04: 上传中心*/
         /*0x08: 触发报警输出*/
@@ -8015,7 +7934,7 @@ DVR实现巡航数据结构
         /*0x40: 联动电子地图(目前只有PCNVR支持)*/
         /*0x200: 抓图并上传FTP*/
         /*0x400: 虚交侦测 联动 聚焦模式（提供可配置项，原先设备自动完成）IPC5.1.0*/
-        /*0x800: PTZ联动跟踪(球机跟踪目标)*/
+        /*0x800: PTZ(球机目标)*/
         /*0x4000:白光灯报警*/
         /*0x10000:短信报警*/
         public int dwMaxRelAlarmOutChanNum; //触发的报警输出通道数（只读）最大支持数
@@ -8279,9 +8198,9 @@ DVR实现巡航数据结构
         public byte byRuleCalibType;//规则标定类型 0-点，1-框，2线
         public NET_VCA_POINT[] struPoint = (NET_VCA_POINT[]) new NET_VCA_POINT().toArray(2);//点测温坐标（当规则标定类型为点的时候生效）数组下标0代表着AlarmID1，数组下标1代表着AlarmID2.
         public NET_VCA_POLYGON[] struRegion = (NET_VCA_POLYGON[]) new NET_VCA_POLYGON().toArray(2);//区域（当规则标定类型为框的时候生效）数组下标0代表着AlarmID1，数组下标1代表着AlarmID2.
-        float fRuleTemperatureDiff;/*配置规则温差,精确到小数点后一位(-40-1000)）*/
+        public float fRuleTemperatureDiff;/*配置规则温差,精确到小数点后一位(-40-1000)）*/
         public float fCurTemperatureDiff;/*当前温差,精确到小数点后一位(-40-1000),（浮点数+100） */
-        NET_PTZ_INFO struPtzInfo;//ptz坐标信息
+        public NET_PTZ_INFO struPtzInfo;//ptz坐标信息
         public int dwPicLen;//可见光图片长度
         public int dwThermalPicLen;//热成像图片长度
         public int dwThermalInfoLen;//热成像附加信息长度
@@ -8291,7 +8210,7 @@ DVR实现巡航数据结构
         public byte byThermometryUnit;//测温单位: 0-摄氏度（℃），1-华氏度（℉），2-开尔文(K)
         public byte byPicTransType;        //图片数据传输方式: 0-二进制；1-url
         public byte[] byRes1 = new byte[2];
-        float fToleranceTemperature;/*容差温度,精确到小数点后一位(-40-1000),（浮点数+100） */
+        public float fToleranceTemperature;/*容差温度,精确到小数点后一位(-40-1000),（浮点数+100） */
         public int dwAlarmFilteringTime;//温度报警等待时间 单位秒 范围为0-200秒，默认为0秒
         public int dwVisibleChannel; //可见光通道通道号
         public byte[] byRes = new byte[48];
@@ -8810,7 +8729,7 @@ DVR实现巡航数据结构
 //	public NET_ITC_EPOLICE_RS485_PARAM     struPERs485 = new NET_ITC_EPOLICE_RS485_PARAM();    //（卡式电警）RS485车检器触发参数
 //	public NET_ITC_POST_MPR_PARAM          struPostMpr = new NET_ITC_POST_MPR_PARAM();    //多帧检测触发（MPR）
 //	public NET_DVR_VIA_VTCOIL_PARAM        struViaVtCoil = new NET_DVR_VIA_VTCOIL_PARAM();  //(VIA)视频检测参数
-//	public NET_ITC_POST_IMT_PARAM          struPostImt = new NET_ITC_POST_IMT_PARAM();//智慧监控触发
+//	public NET_ITC_POST_IMT_PARAM          struPostImt = new NET_ITC_POST_IMT_PARAM();//智慧布防触发
 //	public NET_ITC_POST_PRS_PARAM          struPostPrs = new NET_ITC_POST_PRS_PARAM();//视频检测触发
 //	public NET_IPC_POST_HVT_PARAM          struIpcHvt = new NET_IPC_POST_HVT_PARAM();//(IPC) 混行卡口参数
         public NET_ITC_POST_HVT_PARAM_V50 struHvtV50 = new NET_ITC_POST_HVT_PARAM_V50();  /*（卡口）混行卡口参数V50*/
@@ -9249,7 +9168,7 @@ DVR实现巡航数据结构
     public static class NET_DVR_WHITEBALANCE extends Structure {
         public byte byWhiteBalanceMode; /*0-手动白平衡（MWB）,1-自动白平衡1（AWB1）,2-自动白平衡2 (AWB2),3-自动控制改名为锁定白平衡(Locked WB)，
     4-室外(Indoor)，5-室内(Outdoor)6-日光灯(Fluorescent Lamp)，7-钠灯(Sodium Lamp)，
-    8-自动跟踪(Auto-Track)9-一次白平衡(One Push)，10-室外自动(Auto-Outdoor)，
+    8-自动(Auto-Track)9-一次白平衡(One Push)，10-室外自动(Auto-Outdoor)，
     11-钠灯自动 (Auto-Sodiumlight)，12-水银灯(Mercury Lamp)，13-自动白平衡(Auto)，
 14-白炽灯 (IncandescentLamp)，15-暖光灯(Warm Light Lamp)，16-自然光(Natural Light) */
         public byte byWhiteBalanceModeRGain; /*手动白平衡时有效，手动白平衡 R增益*/
@@ -9606,7 +9525,7 @@ DVR实现巡航数据结构
     }
 
     public static interface FPlayDataCallBack extends Callback {
-        public void invoke(int lPlayHandle, int dwDataType, ByteByReference pBuffer, int dwBufSize, int dwUser);
+        public void invoke(int lPlayHandle, int dwDataType, Pointer pBuffer, int dwBufSize, int dwUser);
     }
 
     public static interface FPlayESCallBack extends Callback {
@@ -9710,6 +9629,8 @@ DVR实现巡航数据结构
 
     boolean NET_DVR_SetPlayDataCallBack(int lPlayHandle, FPlayDataCallBack fPlayDataCallBack, int dwUser);
 
+    boolean NET_DVR_SetPlayDataCallBack_V40(int lPlayHandle, FPlayDataCallBack fPlayDataCallBack, Pointer dwUser);
+
     boolean NET_DVR_SetPlayBackESCallBack(int lPlayHandle, FPlayESCallBack fPlayESCallBack, Pointer pUser);
 
     boolean NET_DVR_PlayBackSaveData(int lPlayHandle, String sFileName);
@@ -9768,7 +9689,7 @@ DVR实现巡航数据结构
 
     boolean NET_DVR_StopListen();
 
-    int NET_DVR_StartListen_V30(String sLocalIP, short wLocalPort, FMSGCallBack_V31 DataCallBack, Pointer pUserData);
+    int NET_DVR_StartListen_V30(String sLocalIP, short wLocalPort, FMSGCallBack DataCallBack, Pointer pUserData);
 
     boolean NET_DVR_StopListen_V30(int lListenHandle);
 
@@ -10333,7 +10254,7 @@ DVR实现巡航数据结构
 
     int NET_DVR_UploadFile_V40(int lUserID, int dwUploadType, Pointer lpInBuffer, int dwInBufferSize, String sFileName, Pointer lpOutBuffer, int dwOutBufferSize);
 
-    int NET_DVR_UploadSend(int  lUploadHandle, NET_DVR_SEND_PARAM_IN pstruSendParamIN, Pointer lpOutBuffer);
+    int NET_DVR_UploadSend(int lUploadHandle, NET_DVR_SEND_PARAM_IN pstruSendParamIN, Pointer lpOutBuffer);
 
     int NET_DVR_GetUploadState(int lUploadHandle, Pointer pProgress);
 
@@ -10598,7 +10519,7 @@ DVR实现巡航数据结构
      */
     public static class NET_DVR_MRD_SEARCH_PARAM extends Structure {
         public int dwSize;            // 结构体大小
-        public NET_DVR_STREAM_INFO struStreamInfo = new NET_DVR_STREAM_INFO();    // 监控点
+        public NET_DVR_STREAM_INFO struStreamInfo = new NET_DVR_STREAM_INFO();    // 布防点
         public short wYear;              // 年
         public byte byMonth;            // 月
         public byte byDrawFrame;    // 0-不抽帧 1-抽帧
@@ -10683,7 +10604,49 @@ DVR实现巡航数据结构
     }
 }
 
+//播放库函数声明,PlayCtrl.dll
+interface PlayCtrl extends Library {
+    public static final int STREAME_REALTIME = 0;
+    public static final int STREAME_FILE = 1;
 
+    boolean PlayM4_GetPort(IntByReference nPort);
+
+    boolean PlayM4_OpenStream(int nPort, ByteByReference pFileHeadBuf, int nSize, int nBufPoolSize);
+
+    boolean PlayM4_InputData(int nPort, ByteByReference pBuf, int nSize);
+
+    boolean PlayM4_CloseStream(int nPort);
+
+    boolean PlayM4_SetStreamOpenMode(int nPort, int nMode);
+
+    boolean PlayM4_Play(int nPort, HWND hWnd);
+
+    boolean PlayM4_Stop(int nPort);
+
+    boolean PlayM4_SetSecretKey(int nPort, int lKeyType, String pSecretKey, int lKeyLen);
+
+    boolean PlayM4_GetPictureSize(int nPort, IntByReference pWidth, IntByReference pHeight);
+
+    boolean PlayM4_GetJPEG(int nPort, Pointer pBitmap, int nBufSize, IntByReference pBmpSize);
+
+    int PlayM4_GetLastError(int nPort);
+
+    boolean PlayM4_SetDecCallBackExMend(int nPort, DecCallBack decCBFun, Pointer pDest, int nDestSize, int nUser);
+
+    public static interface DecCallBack extends Callback {
+        void invoke(int nPort, Pointer pBuf, int nSize, FRAME_INFO pFrameInfo, int nReserved1, int nReserved2);
+    }
+
+    public class FRAME_INFO extends Structure {
+        public int nWidth;                   /* 画面宽，单位像素。如果是音频数据，则为音频声道数 */
+        public int nHeight;                     /* 画面高，单位像素。如果是音频数据，则为样位率 */
+        public int nStamp;                           /* 时标信息，单位毫秒 */
+        public int nType;                            /* 数据类型，T_AUDIO16, T_RGB32, T_YV12 */
+        public int nFrameRate;                /* 编码时产生的图像帧率，如果是音频数据则为采样率 */
+        public int dwFrameNum;                      /* 帧号 */
+    }
+
+}
 
 //windows gdi接口,gdi32.dll in system32 folder, 在设置遮挡区域,移动侦测区域等情况下使用
 interface GDI32 extends W32API {
@@ -10695,7 +10658,6 @@ interface GDI32 extends W32API {
 
     HANDLE CreateSolidBrush(int icolor);
 }
-//播放库函数声明,PlayCtrl.dll
 
 //windows user32接口,user32.dll in system32 folder, 在设置遮挡区域,移动侦测区域等情况下使用
 interface USER32 extends W32API {
